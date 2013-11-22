@@ -107,7 +107,7 @@ class Builder
     tree = {}
     for folder in @config.src_folders
       t = (tree[folder.alias] = {}) if folder.alias?
-      @_build_ns_tree t || tree, folder.path
+      @_build_ns_tree(t || tree, folder.path)
 
     buffer = ""
     for name, scope of tree
@@ -123,13 +123,13 @@ class Builder
   ###
   _build_ns_tree: (tree, folderpath) ->
     return unless fs.lstatSync(folderpath).isDirectory()
-    folders = fsu.ls(folderpath)
-    for folder in folders
+    for file in fsu.ls(folderpath)
+      continue unless fs.lstatSync(file).isDirectory()
       include = true
       for item in @exclude
-        include &= !(new RegExp( item ).test folder)
+        include &= !(new RegExp(item).test file)
       if include
-        @_build_ns_tree (tree[folder.match /[^\/\\]+$/m] = {}), folder
+        @_build_ns_tree((tree[file.match /[^\/\\]+$/m] = {}), file)
 
   ###
   @return {String}
