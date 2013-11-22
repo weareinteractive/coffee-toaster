@@ -1,22 +1,93 @@
-#<< toaster/utils/array-util
-
 class Script
 
+  # -----------------------------------------------------------------------------------------------
+  # ~ Requirements
+  # -----------------------------------------------------------------------------------------------
+
   # requires
-  fs = require "fs"
-  path = require 'path'
-  cs = require "coffee-script"
+  fs = require("fs")
+  path = require("path")
+  cs = require("coffee-script")
 
-  ArrayUtil = toaster.utils.ArrayUtil
+  # -----------------------------------------------------------------------------------------------
+  # ~ Variables
+  # -----------------------------------------------------------------------------------------------
 
-  constructor: (@builder, @folderpath, @realpath, @alias, @opts) ->
-    @getinfo()
+  builder: null
+  folderpath: null
+  realpath: null
+  alias: null
+  opts: null
 
+  dependencies_collapsed: null
+  raw: null
+  baseclasses: null
+  filepath: null
+  filename: null
+  filefolder: null
+  namespace: null
 
+  # -----------------------------------------------------------------------------------------------
+  # ~ Constructor
+  # -----------------------------------------------------------------------------------------------
 
-  getinfo:( declare_ns = true )->
+  constructor: (@builder, @folderpath, @realpath, @alias) ->
+    @_getinfo()
+
+  # -----------------------------------------------------------------------------------------------
+  # ~ Public methods
+  # -----------------------------------------------------------------------------------------------
+
+  ###
+  @return {Array}
+  ###
+  expand_dependencies: ->
+
+    # referencies the builder's files array
+    files = @builder.files
+
+    # resets the dependencies array
+    @dependencies = []
+
+    # looping through file dependencies
+    for dependency, index in @dependencies_collapsed
+
+      # normalize first slash / backslash
+      if (dependency.substr 0, 1) is path.sep
+        dependency = dependency.substr 1
+
+      # if dependency is not a wild-card (namespace.*)
+      if dependency.substr(-1) != "*"
+        # then add file extension to it and continue
+        @dependencies.push "#{path.sep}#{dependency}.coffee"
+        continue
+
+      # otherwise find all files under that namespace
+      reg = new RegExp dependency.replace /(\/|\\)/g, "\\$1"
+      found = ArrayUtil.find_all files, reg, "filepath", true, true
+
+      # if nothing is found under the given namespace
+      if found.length <= 0
+        warn "Nothing found inside #{("'"+dependency).white}'".yellow
+        continue
+
+      # otherwise rewrites found array with filepath info only
+      for expanded in found
+        if expanded.item.filepath isnt @filepath
+          @dependencies.push expanded.item.filepath
+
+    @dependencies
+
+  # -----------------------------------------------------------------------------------------------
+  # ~ Private methods
+  # -----------------------------------------------------------------------------------------------
+
+  ###
+  @param {Boolean} declare_ns
+  ###
+  _getinfo: (declare_ns=true) ->
     # read file content and initialize dependencies and baseclasses array
-    @raw = fs.readFileSync @realpath, "utf-8"
+    @raw = fs.readFileSync(@realpath, "utf-8")
     @dependencies_collapsed = []
     @baseclasses = []
 
@@ -95,7 +166,7 @@ class Script
       requirements = @raw.match /(#<<\s)(.*)/g
       for item in requirements
         # 1. filter dependency name
-        # 2. trim it 
+        # 2. trim it
         # 3. split all dependencies
         # 4. concat it with the dependencies array
         item         = /(#<<\s)(.*)/.exec( item )[ 2 ]
@@ -107,40 +178,3 @@ class Script
         item = item.replace /(\/)/g, "\\" if path.sep == "\\"
 
         @dependencies_collapsed = @dependencies_collapsed.concat item
-
-  expand_dependencies:()->
-
-    # referencies the builder's files array
-    files = @builder.files
-
-    # resets the dependencies array
-    @dependencies = []
-
-    # looping through file dependencies
-    for dependency, index in @dependencies_collapsed
-
-      # normalize first slash / backslash
-      if (dependency.substr 0, 1) is path.sep
-        dependency = dependency.substr 1
-
-      # if dependency is not a wild-card (namespace.*)
-      if dependency.substr(-1) != "*"
-        # then add file extension to it and continue
-        @dependencies.push "#{path.sep}#{dependency}.coffee"
-        continue
-
-      # otherwise find all files under that namespace
-      reg = new RegExp dependency.replace /(\/|\\)/g, "\\$1"
-      found = ArrayUtil.find_all files, reg, "filepath", true, true
-
-      # if nothing is found under the given namespace
-      if found.length <= 0
-        warn "Nothing found inside #{("'"+dependency).white}'".yellow
-        continue
-      
-      # otherwise rewrites found array with filepath info only
-      for expanded in found
-        if expanded.item.filepath isnt @filepath
-          @dependencies.push expanded.item.filepath
-
-    @dependencies
