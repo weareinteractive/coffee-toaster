@@ -15,7 +15,7 @@ baseDir = process.cwd()
 tmpDir = "#{baseDir}/test/tmp"
 
 module.exports =
-  "Test #toasty":
+  "Test #toaster":
     before: ->
       fs.removeSync(tmpDir) if fs.existsSync(tmpDir)
       fs.mkdirSync(tmpDir)

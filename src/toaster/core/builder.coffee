@@ -121,8 +121,9 @@ class Builder
   ###
   Walk some folderpath and lists all its subfolders
   ###
-  _build_ns_tree:( tree, folderpath )->
-    folders = fsu.ls folderpath
+  _build_ns_tree: (tree, folderpath) ->
+    return unless fs.lstatSync(folderpath).isDirectory()
+    folders = fsu.ls(folderpath)
     for folder in folders
       include = true
       for item in @exclude
