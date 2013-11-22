@@ -1,4 +1,7 @@
 # coffee-toaster-api
+[![Build Status](https://travis-ci.org/weareinteractive/node-coffee-toaster-api.png?branch=master)](https://travis-ci.org/weareinteractive/node-coffee-toaster-api)
+[![Coverage Status](https://coveralls.io/repos/weareinteractive/node-coffee-toaster-api/badge.png?branch=master)](https://coveralls.io/r/weareinteractive/node-coffee-toaster-api?branch=master)
+[![Dependency Status](https://gemnasium.com/weareinteractive/node-coffee-toaster-api.png)](https://gemnasium.com/weareinteractive/node-coffee-toaster-api)
 
 > Minimalist build system for CoffeeScript.
 >
@@ -133,7 +136,7 @@ options = {
   folders: "src/app":"app",
   release: "lib/app.js"
 }
-  
+
 var toaster = new Toasty(process.cwd(), options);
 toaster.build();
 ```
