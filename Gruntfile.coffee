@@ -58,6 +58,7 @@ module.exports = (grunt) ->
     # Deployment
     bumper:
       options:
+        npm: true
         tasks: ["default"]
         files: ["package.json"]
         updateConfigs: ["pkg"]

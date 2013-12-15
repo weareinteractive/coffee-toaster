@@ -40,9 +40,9 @@ class Toast
       return process.exit()
 
     # validate release folder
-    releaseDir = path.join(@basepath, path.dirname(params.release))
-    unless fs.existsSync(releaseDir)
-      error "Release folder does not exist:\n\t#{releaseDir.yellow}"
+    dir = path.join(@basepath, path.dirname(params.release))
+    unless fs.existsSync(dir)
+      error "Release folder does not exist:\n\t#{dir.yellow}"
       return process.exit()
 
     config =
