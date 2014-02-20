@@ -41,7 +41,7 @@ module.exports = (grunt) ->
         ui: 'exports'
         timeout: 10000
         require: 'coffee-script'
-        compilers: ['coffee:coffee-script']
+        compilers: ['coffee:coffee-script/register']
         files: 'test/specs/**/*.coffee'
       all:
         options:
