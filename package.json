@@ -46,7 +46,7 @@
   "dependencies": {
     "fs-util": "~0.3",
     "uglify-js": "~2.4",
-    "coffee-script": "~1.6"
+    "coffee-script": "~1.7"
   },
   "keywords": [
     "coffeescript",
