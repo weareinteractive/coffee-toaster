@@ -1,6 +1,6 @@
 {
   "name": "coffee-toaster-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Minimalist build system for CoffeeScript based ExtendScripts.",
   "homepage": "https://github.com/weareinteractive/node-coffee-toaster-api",
   "author": {
