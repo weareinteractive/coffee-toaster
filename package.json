@@ -24,12 +24,14 @@
       "url": "https://github.com/weareinteractive/coffee-toaster-api/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "./lib/toaster",
+  "main": "lib/toaster",
   "engines": {
     "node": ">=0.8.0"
   },
   "scripts": {
-    "test": "grunt test:travis",
+    "test": "grunt test:travis"
+  },
+  "config": {
     "blanket": {
       "pattern": ["coffee-toaster-api/lib"]
     }

@@ -43,13 +43,12 @@ module.exports = (grunt) ->
         require: 'coffee-script'
         compilers: ['coffee:coffee-script/register']
         files: 'test/specs/**/*.coffee'
-      all:
+      test:
         options:
           reporter: 'spec'
       coverage:
         options:
-          coveralls:
-            serviceName: 'travis-ci'
+          coveralls: true
       htmlcoverage:
         options:
           reporter: 'html-cov'
@@ -73,6 +72,6 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask "default", ["coffeelint", "coffee"]
-  grunt.registerTask "test", ["default", "mochacov:all", "mochacov:htmlcoverage"]
-  grunt.registerTask "test:travis", ["default", "mochacov:all", "mochacov:coverage"]
+  grunt.registerTask "test", ["default", "mochacov:test", "mochacov:htmlcoverage"]
+  grunt.registerTask "test:travis", ["default", "mochacov:test", "mochacov:coverage"]
 
