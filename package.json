@@ -29,7 +29,9 @@
     "node": ">=0.8.0"
   },
   "scripts": {
-    "test": "grunt test:travis",
+    "test": "grunt test:travis"
+  },
+  "config": {
     "blanket": {
       "pattern": ["coffee-toaster-api/lib"]
     }
